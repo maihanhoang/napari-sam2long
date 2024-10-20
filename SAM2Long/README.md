@@ -1,9 +1,9 @@
 # <img src="img/logo.png" style="vertical-align: -10px;" :height="40px" width="40px"> SAM2Long
 This repository is the official implementation of SAM2Long.
-<img align="center" src="img/pipeline.png" style="  display: block;
+<!-- <img align="center" src="img/pipeline.png" style="  display: block;
   margin-left: auto;
   margin-right: auto;
-  width: 100%;" />
+  width: 100%;" /> -->
 
 <p align="center" style="font-size: em; margin-top: 0.5em">
 
@@ -44,7 +44,7 @@ SAM2Long pushes the performance limits of SAM 2 even further across various vide
 
 ### SAM 2.1 checkpoints
 The table below provides a one-to-one comparison between SAM 2 and SAM2Long using the improved SAM 2.1 checkpoints.
-|  Method  | Backbone | SA-V val ($\mathcal{J} \& \mathcal{F}$) | SA-V test ($\mathcal{J} \& \mathcal{F}$) | LVOS v2 ($\mathcal{J} \& \mathcal{F}$) |
+|  Method  | Backbone | SA-V val (J & F) | SA-V test (J & F) | LVOS v2 (J & F) |
 | :------: | :--------: | :------: | :--------: | :--------: |
 |  SAM 2   | Tiny   | 73.5 | 74.6 | 77.8 |
 |  SAM2Long| Tiny   |  77.0 | 78.7 | 81.4 |
@@ -58,7 +58,7 @@ The table below provides a one-to-one comparison between SAM 2 and SAM2Long usin
 ### SAM 2 checkpoints
 The table below provides a one-to-one comparison between SAM 2 and SAM2Long using the SAM 2 checkpoints.
 
-|  Method  | Backbone | SA-V val ($\mathcal{J} \& \mathcal{F}$) | SA-V test ($\mathcal{J} \& \mathcal{F}$) | LVOS v2 ($\mathcal{J} \& \mathcal{F}$) |
+|  Method  | Backbone | SA-V val (J & F) | SA-V test (J & F) | LVOS v2 (J & F) |
 | :------: | :--------: | :------: | :--------: | :--------: |
 |  SAM 2   | Tiny   | 75.1 | 76.3 | 81.6 |
 |  SAM2Long| Tiny   | 78.9 | 79.0 | 82.4 |
