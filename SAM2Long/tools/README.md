@@ -50,9 +50,10 @@ Note: by default, the `vos_inference.py` script above assumes that all objects t
 
 
 ### Multi-Node Inference for Accelerated Processing
-We speed up the inference using parallel processing across multiple cards.
+In default, you can run the following command to perform the inference on a single GPU with a single chunk. 
+Also, we speed up the inference using parallel processing across multiple cards.
 
-The following SLURM script demonstrates how to run inference across multiple GPUs in parallel. This script assumes that you have 8 GPUs available on each node and distributes the video processing evenly across the GPUs. You can adjust the number of GPUs per node by specifying the `--num_nodes` argument.
+The following SLURM script runs inference in parallel across multiple GPUs. It assumes each node has 8 GPUs and evenly distributes video processing tasks across these GPUs. You can adjust the number of GPUs per node by specifying the `--num_nodes` argument.
 
 ```bash
 set -x
@@ -83,4 +84,9 @@ done
 
 wait
 ```
-Each node will process a chunk of the video sequences in parallel, speeding up the overall inference process.
+
+To launch the inference, run the following command:
+```bash
+srun  -p $PARTITION --cpus-per-task=8 --nodes=2 --ntasks-per-node=1 --gres=gpu:8 bash inference.sh 2
+```
+In this example, we initialize 2 nodes with a total of 16 GPUs for inference. Each node processes a portion of the video sequences in parallel, which significantly accelerates the overall inference process.
