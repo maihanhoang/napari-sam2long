@@ -1,8 +1,4 @@
-## SAM 2 toolkits
-
-This directory provides toolkits for additional SAM 2 use cases.
-
-### Semi-supervised VOS inference
+# Semi-supervised VOS Inference
 
 The `vos_inference.py` script can be used to generate predictions for semi-supervised video object segmentation (VOS) evaluation on datasets such as [DAVIS](https://davischallenge.org/index.html),  [LVOS](https://lingyihongfd.github.io/lvos.github.io/), [MOSE](https://henghuiding.github.io/MOSE/) or the SA-V dataset.
 
@@ -49,7 +45,7 @@ Then, we can use the evaluation tools or servers for each dataset to get the per
 Note: by default, the `vos_inference.py` script above assumes that all objects to track already appear on frame 0 in each video (as is the case in DAVIS, MOSE or SA-V). **For VOS datasets that don't have all objects to track appearing in the first frame (such as LVOS or YouTube-VOS), please add the `--track_object_appearing_later_in_video` flag when using `vos_inference.py`**.
 
 
-### Multi-Node Inference for Accelerated Processing
+## Multi-Node Inference for Accelerated Processing
 In default, you can run the following command to perform the inference on a single GPU. 
 Also, we provide the multi-node inference to speed up the process.
 
