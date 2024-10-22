@@ -35,7 +35,7 @@ SAM2Long significantly improves upon SAM 2 by addressing **error accumulation** 
 
 SAM2Long introduces a **training-free** memory tree that effectively reduces the risk of error propagation over time. By maintaining diverse segmentation hypotheses and dynamically pruning less optimal paths as the video progresses, this approach enhances segmentation without the need for additional parameters or further training. It maximizes the potential of SAM 2 to deliver better results in complex video scenarios.
 
-### 😮 Superior Performance Compared to SAM 2
+### 🤯 Superior Performance Compared to SAM 2
 
 SAM2Long pushes the performance limits of SAM 2 even further across various video object segmentation benchmarks, especially achieving an average improvement of 3 in J & F scores across all 24 head-to-head comparsions on long-term video datasets like SA-V and LVOS.
 
@@ -105,9 +105,15 @@ I would like to thank [Yixuan Wang](https://wangyixuan12.github.io/) for his ass
 
 This project is built upon [SAM 2](https://github.com/facebookresearch/sam2) and the format of this README is inspired by [VideoMAE](https://github.com/MCG-NJU/VideoMAE/blob/main/README.md).
 
-<!-- ## ✒️ Citation
-If you find our work helpful for your research, please consider giving a star ⭐ and citation 📝
+## ✒️ Citation
+If you find our work helpful for your research, please consider giving a star ⭐ and citation 📝.
 ```bibtex
-``` -->
+@article{ding2024sam2long,
+        title={SAM2Long: Enhancing SAM 2 for Long Video Segmentation with a Training-Free Memory Tree},
+        author={Ding, Shuangrui and Qian, Rui and Dong, Xiaoyi and Zhang, Pan and Zang, Yuhang and Cao, Yuhang and Guo, Yuwei and Lin, Dahua and Wang, Jiaqi},
+        journal={arXiv preprint arXiv:2410.16268},
+        year={2024}
+      }
+```
 
 
