@@ -8,14 +8,14 @@ This repository is the official implementation of SAM2Long.
 <p align="center" style="font-size: em; margin-top: 0.5em">
 
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC_BY--NC_4.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/)<br>
-<a href="https://arxiv.org/abs/xxxx"><img src="https://img.shields.io/badge/arXiv-<color>"></a>
+<a href="https://arxiv.org/abs/2410.16268"><img src="https://img.shields.io/badge/arXiv-<color>"></a>
 <a href="https://mark12ding.github.io/project/SAM2Long/asset/images/paper.pdf"><img src="https://img.shields.io/badge/PDF-red"></a>
 <a href="https://mark12ding.github.io/project/SAM2Long/"><img src="https://img.shields.io/badge/Project-Homepage-green"></a>
 </p>
 
 
 
->[**SAM2Long: Enhancing SAM 2 for Long Video Segmentation with a Training-Free Memory Tree**](https://arxiv.org/abs/xxxxxx)<br>
+>[**SAM2Long: Enhancing SAM 2 for Long Video Segmentation with a Training-Free Memory Tree**](https://arxiv.org/abs/2410.16268)<br>
 > [Shuangrui Ding](https://mark12ding.github.io/), [Rui Qian](https://shvdiwnkozbw.github.io/), [Xiaoyi Dong](https://lightdxy.github.io/), [Pan Zhang](https://panzhang0212.github.io/)<br>
 [Yuhang Zang](https://yuhangzang.github.io/), [Yuhang Cao](https://scholar.google.com/citations?user=sJkqsqkAAAAJ), [Yuwei Guo](https://guoyww.github.io/), [Dahua Lin](http://dahua.site/), [Jiaqi Wang](https://myownskyw7.github.io/)<br>
 CUHK, Shanghai AI Lab
