@@ -8,9 +8,10 @@ This repository is the official implementation of SAM2Long.
 <p align="center" style="font-size: em; margin-top: 0.5em">
 
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC_BY--NC_4.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/)<br>
-<a href="https://arxiv.org/abs/2410.16268"><img src="https://img.shields.io/badge/arXiv-<color>"></a>
-<a href="https://mark12ding.github.io/project/SAM2Long/asset/images/paper.pdf"><img src="https://img.shields.io/badge/PDF-red"></a>
+<a href="https://arxiv.org/abs/2410.16268"><img src="https://img.shields.io/badge/arXiv-paper-<color>"></a>
 <a href="https://mark12ding.github.io/project/SAM2Long/"><img src="https://img.shields.io/badge/Project-Homepage-green"></a>
+<a href="https://mark12ding.github.io/project/SAM2Long/asset/images/paper.pdf"><img src="https://img.shields.io/badge/PDF-red"></a>
+<a href="https://huggingface.co/papers/2410.16268"><img src="https://img.shields.io/badge/🤗Hugging face-yellow"></a>
 </p>
 
 
