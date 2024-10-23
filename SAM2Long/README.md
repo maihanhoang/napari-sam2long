@@ -38,7 +38,7 @@ SAM2Long introduces a **training-free** memory tree that effectively reduces the
 
 ### 🤯 Superior Performance Compared to SAM 2
 
-SAM2Long pushes the performance limits of SAM 2 even further across various video object segmentation benchmarks, especially achieving an average improvement of 3 in J & F scores across all 24 head-to-head comparsions on long-term video datasets like SA-V and LVOS.
+SAM2Long pushes the performance limits of SAM 2 even further across various video object segmentation benchmarks, especially achieving an average improvement of 3 in J & F scores across all 24 head-to-head comparisons on long-term video datasets like SA-V and LVOS.
 
 
 ## 🚀 Main Results
