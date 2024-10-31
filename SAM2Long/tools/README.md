@@ -68,7 +68,7 @@ for IDX in $(seq 0 $((CHUNKS-1))); do
         --input_mask_dir /path-to-sav-val/Annotations_6fps \
         --video_list_file /path-to-sav-val/sav_val.txt \
         --per_obj_png_file \
-        --output_mask_dir ./outputs/sav_val_pred_pngs
+        --output_mask_dir ./outputs/sav_val_pred_pngs \
         --num_pathway 3 \
         --iou_thre 0.1 \
         --uncertainty 2 \
