@@ -85,7 +85,7 @@ cd ..
 ```
 
 ### Inference
-The inference instruction is in [INFERENCE.md](tools/README.md).
+The inference instruction is in [INFERENCE.md](tools/README.md). If you encounter issues running the code, it's recommended to create a new environment specifically for SAM2Long instead of sharing it with SAM2. For further details, please check this issue [here](https://github.com/Mark12Ding/SAM2Long/issues/5#issuecomment-2458974462).
 
 ### Evaluation
 
