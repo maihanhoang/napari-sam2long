@@ -73,7 +73,7 @@ The table below provides a one-to-one comparison between SAM 2 and SAM2Long usin
 ## 🛠️ Usage
 
 ### Installation
-Please follow the instruction of [official SAM 2 repo](https://github.com/facebookresearch/sam2?tab=readme-ov-file#installation).
+Please follow the instruction of [official SAM 2 repo](https://github.com/facebookresearch/sam2?tab=readme-ov-file#installation). If you encounter issues running the code, it's recommended to create a new environment specifically for SAM2Long instead of sharing it with SAM2. For further details, please check this issue [here](https://github.com/Mark12Ding/SAM2Long/issues/5#issuecomment-2458974462).
 
 ### Download Checkpoints
 All the model checkpoints can be downloaded by running:
@@ -85,7 +85,7 @@ cd ..
 ```
 
 ### Inference
-The inference instruction is in [INFERENCE.md](tools/README.md). If you encounter issues running the code, it's recommended to create a new environment specifically for SAM2Long instead of sharing it with SAM2. For further details, please check this issue [here](https://github.com/Mark12Ding/SAM2Long/issues/5#issuecomment-2458974462).
+The inference instruction is in [INFERENCE.md](tools/README.md). 
 
 ### Evaluation
 
