@@ -21,6 +21,8 @@ This repository is the official implementation of SAM2Long.
 [Yuhang Zang](https://yuhangzang.github.io/), [Yuhang Cao](https://scholar.google.com/citations?user=sJkqsqkAAAAJ), [Yuwei Guo](https://guoyww.github.io/), [Dahua Lin](http://dahua.site/), [Jiaqi Wang](https://myownskyw7.github.io/)<br>
 CUHK, Shanghai AI Lab
 
+https://github.com/user-attachments/assets/265a1f01-ea60-4480-b1d6-ce1b85e48c89
+
 ## 💡 Highlights
 
 ### 🔥 Enhanced Capability in Long-Term Video Segmentation
