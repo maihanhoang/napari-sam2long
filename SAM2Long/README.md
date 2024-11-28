@@ -23,6 +23,8 @@ CUHK, Shanghai AI Lab
 
 https://github.com/user-attachments/assets/265a1f01-ea60-4480-b1d6-ce1b85e48c89
 
+(More Demos are shown in the [project page](https://mark12ding.github.io/project/SAM2Long/)!)
+
 ## 💡 Highlights
 
 ### 🔥 Enhanced Capability in Long-Term Video Segmentation
