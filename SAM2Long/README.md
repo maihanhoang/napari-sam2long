@@ -1,4 +1,4 @@
-[# <img src="img/logo.png" style="vertical-align: -10px;" :height="40px" width="40px"> SAM2Long
+# <img src="img/logo.png" style="vertical-align: -10px;" :height="40px" width="40px"> SAM2Long
 This repository is the official implementation of SAM2Long.
 <!-- <img align="center" src="img/pipeline.png" style="  display: block;
   margin-left: auto;
@@ -11,7 +11,7 @@ This repository is the official implementation of SAM2Long.
 <a href="https://arxiv.org/abs/2410.16268"><img src="https://img.shields.io/badge/arXiv-paper-<color>"></a>
 <a href="https://mark12ding.github.io/project/SAM2Long/"><img src="https://img.shields.io/badge/Project-Homepage-green"></a>
 <a href="https://mark12ding.github.io/project/SAM2Long/asset/images/paper.pdf"><img src="https://img.shields.io/badge/PDF-red"></a>
-<a href="https://huggingface.co/papers/2410.16268"><img src="https://img.shields.io/badge/🤗Hugging face-yellow"></a>
+<a href="https://huggingface.co/spaces/Mar2Ding/SAM2Long-Demo"><img src="https://img.shields.io/badge/🤗Hugging Demo-yellow"></a>
 </p>
 
 
@@ -24,6 +24,11 @@ CUHK, Shanghai AI Lab
 https://github.com/user-attachments/assets/265a1f01-ea60-4480-b1d6-ce1b85e48c89
 
 (More Demos are shown in the [project page](https://mark12ding.github.io/project/SAM2Long/)!)
+
+## 📰 News
+[2024/12/9]🔥🔥🔥 The SAM2Long demo is now live on Hugging Face Spaces 🤗[Link](https://huggingface.co/spaces/Mar2Ding/SAM2Long-Demo). Take a look!
+
+
 
 ## 💡 Highlights
 
@@ -122,4 +127,3 @@ If you find our work helpful for your research, please consider giving a star �
 ```
 
 
-](https://github.com/Mark12Ding/SAM2Long/blob/main/README.md)
