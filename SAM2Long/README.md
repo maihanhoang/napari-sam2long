@@ -1,4 +1,4 @@
-# <img src="img/logo.png" style="vertical-align: -10px;" :height="40px" width="40px"> SAM2Long
+[# <img src="img/logo.png" style="vertical-align: -10px;" :height="40px" width="40px"> SAM2Long
 This repository is the official implementation of SAM2Long.
 <!-- <img align="center" src="img/pipeline.png" style="  display: block;
   margin-left: auto;
@@ -122,3 +122,4 @@ If you find our work helpful for your research, please consider giving a star тн
 ```
 
 
+](https://github.com/Mark12Ding/SAM2Long/blob/main/README.md)
