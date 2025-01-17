@@ -102,7 +102,7 @@ class SAMV2_min(QWidget):
     def populate_model_combo(self):
         self.model_cbbox.clear()
         self.model_cbbox.addItems(
-            ["sam2_hiera_large", "sam2_hiera_small", "sam2_hiera_tiny"]
+            ["sam2.1_hiera_large", "sam2.1_hiera_small", "sam2.1_hiera_tiny", "sam2.1_hiera_base_plus"]
         )
 
     # Choose inter frame dir
@@ -111,28 +111,45 @@ class SAMV2_min(QWidget):
         print(dname)
         self.interdir_lineedt.setText(str(dname))
 
-    # Initialize pipeline
-    BASE_URL = "https://dl.fbaipublicfiles.com/segment_anything_2/072824/"
+    # # Initialize pipeline
+    # BASE_URL = "https://dl.fbaipublicfiles.com/segment_anything_2/072824/"
+    # CHECKPOINTS = {
+    #     "sam2_hiera_tiny": "sam2_hiera_tiny.pt",
+    #     "sam2_hiera_small": "sam2_hiera_small.pt",
+    #     "sam2_hiera_base_plus": "sam2_hiera_base_plus.pt",
+    #     "sam2_hiera_large": "sam2_hiera_large.pt",
+    # }
+
+        # Initialize pipeline
+    BASE_URL = "https://dl.fbaipublicfiles.com/segment_anything_2/092824/"
     CHECKPOINTS = {
-        "sam2_hiera_tiny": "sam2_hiera_tiny.pt",
-        "sam2_hiera_small": "sam2_hiera_small.pt",
-        "sam2_hiera_base_plus": "sam2_hiera_base_plus.pt",
-        "sam2_hiera_large": "sam2_hiera_large.pt",
+        "sam2.1_hiera_tiny": "sam2.1_hiera_tiny.pt",
+        "sam2.1_hiera_small": "sam2.1_hiera_small.pt",
+        "sam2.1_hiera_base_plus": "sam2.1_hiera_base_plus.pt",
+        "sam2.1_hiera_large": "sam2.1_hiera_large.pt",
     }
+
 
     def initialize_pipeline(self):
         script_dir = os.path.dirname(__file__)
 
         model_map = {
-            "sam2_hiera_large": ("sam2_hiera_l.yaml", "sam2_hiera_large.pt"),
-            "sam2_hiera_small": ("sam2_hiera_s.yaml", "sam2_hiera_small.pt"),
-            "sam2_hiera_tiny": ("sam2_hiera_t.yaml", "sam2_hiera_tiny.pt"),
+            "sam2.1_hiera_large": ("configs/sam2.1/sam2.1_hiera_l.yaml", "sam2.1_hiera_large.pt"),
+            "sam2.1_hiera_small": ("configs/sam2.1/sam2.1_hiera_s.yaml", "sam2.1_hiera_small.pt"),
+            "sam2.1_hiera_tiny": ("configs/sam2.1/sam2.1_hiera_t.yaml", "sam2.1_hiera_tiny.pt"),
+            "sam2.1_hiera_base_plus": ("configs/sam2.1/sam2.1_hiera_b+.yaml", "sam2.1_hiera_base_plus.pt"),
         }
 
         selected_model = self.model_cbbox.currentText()
 
         if selected_model in model_map:
             model_cfg, checkpoint_name = model_map[selected_model]
+            ## Added by Mai
+            model_cfg_path = os.path.join(
+                # script_dir, "..", "configs", model_cfg
+                "configs", "sam2.1", model_cfg
+            )
+            ##
             checkpoint_path = os.path.join(
                 script_dir, "..", "model", checkpoint_name
             )
@@ -143,9 +160,9 @@ class SAMV2_min(QWidget):
                     f"Checkpoint {checkpoint_name} not found. Downloading..."
                 )
                 self.download_checkpoint(checkpoint_name, checkpoint_path)
-
+            print("Model_cfg ", model_cfg_path)
             self.pipeline_object = SamV2_pipeline(
-                self.viewer, self, checkpoint_path, model_cfg
+                self.viewer, self, checkpoint_path, model_cfg # _path # model_cfg, Changed by Mai
             )
         else:
             print("Model not recognized.")
@@ -202,7 +219,10 @@ class SAMV2_min(QWidget):
                 )
 
     def video_propagate(self):
+        # Changed by Mai
         self.pipeline_object.video_propagate()
+        # self.viewer.add_labels(label_input)
+        # self.viewer.add_labels(new_label)
 
     def reset_everything(self):
         self.pipeline_object.reset()
