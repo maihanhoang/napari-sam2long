@@ -6,6 +6,7 @@ import torch
 from PIL import Image
 from qtpy.QtWidgets import QWidget
 from sam2.build_sam import build_sam2_video_predictor
+import cv2 ### Added by Mai
 
 
 # Sam V2 pipeline class
@@ -34,7 +35,15 @@ class SamV2_pipeline(QWidget):
         sam2_checkpoint = checkpoint_path
         model_cfg = model_cfg_name
 
-        self.predictor = build_sam2_video_predictor(model_cfg, sam2_checkpoint)
+        ### Changed by Mai
+        # self.predictor = build_sam2_video_predictor(model_cfg, sam2_checkpoint)
+        self.predictor = build_sam2_video_predictor(
+            model_cfg,
+            sam2_checkpoint,
+            hydra_overrides_extra=[
+                "++model.sam_mask_decoder_extra_args.dynamic_multimask_via_stability=true",
+            ],
+        )
 
         self.preprocess_volume()
 
@@ -64,9 +73,13 @@ class SamV2_pipeline(QWidget):
                 continue
 
             # If the slice path does not exists - create slices and save them
-            slice = volume[i, :, :]
-            slice_array = Image.fromarray(slice)
-            slice_array.save(slice_path)
+            
+            ### Changed by Mai
+            # slice = volume[i, :, :]
+            # slice_array = Image.fromarray(slice)
+            # slice_array.save(slice_path)
+            slice = volume[i]
+            cv2.imwrite(slice_path, slice.squeeze())
 
         print("Frames Generated")
 
@@ -209,9 +222,9 @@ class SamV2_pipeline(QWidget):
         #         )
         #         firsttime = False
 
-            # progress = int((out_frame_idx * 50) / label_layer_data.shape[0])
-            # progress = abs(final_progress_here - progress) + 50
-            # self.mwo.video_propagation_progressBar.setValue(progress)
+        #     progress = int((out_frame_idx * 50) / label_layer_data.shape[0])
+        #     progress = abs(final_progress_here - progress) + 50
+        #     self.mwo.video_propagation_progressBar.setValue(progress)
 
         layer.data = np.maximum(label_layer_data, label_layer_data_2)
         self.viewer.add_labels(np.maximum(label_layer_data, label_layer_data_2), name="new_label")
