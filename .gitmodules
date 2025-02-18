@@ -1,0 +1,6 @@
+[submodule "SAM2Long/SAM2Long"]
+	path = SAM2Long/SAM2Long
+	url = git@github.com:maihanhoang/SAM2Long.git
+[submodule "SAM2Long"]
+	path = SAM2Long
+	url = git@github.com:maihanhoang/SAM2Long.git
