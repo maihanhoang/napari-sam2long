@@ -13,7 +13,8 @@ from qtpy.QtWidgets import (
     QPushButton,
     QWidget,
 )
-
+# Imported by Mai
+from napari.utils.notifications import show_info
 
 # Main Plugin class that is connected from outside at napari plugin entry point
 class SAMV2_min(QWidget):
@@ -69,8 +70,16 @@ class SAMV2_min(QWidget):
 
     # Function to populate combo boxes based on layers
     def populate_combo_box(self, combobx, layer_type="image"):
+        ### Changed by Mai to remember last selected layer
+        # Save current selection,
+        if combobx is not None:
+            current_text = combobx.currentText()
+        else:
+            current_text = None
+
         # Clear the combo box first
         combobx.clear()
+        
         if layer_type == "image":
             # Get all existing image layers from the napari viewer
             layers = [
@@ -91,6 +100,10 @@ class SAMV2_min(QWidget):
             )
 
         combobx.addItems(layers)
+        # Keep last selected item
+        if current_text is not None:
+            combobx.setCurrentText(current_text)
+
 
     # Function to handle combobox state change
     def layer_changed(self):
@@ -102,7 +115,7 @@ class SAMV2_min(QWidget):
     def populate_model_combo(self):
         self.model_cbbox.clear()
         self.model_cbbox.addItems(
-            ["sam2.1_hiera_large", "sam2.1_hiera_small", "sam2.1_hiera_tiny", "sam2.1_hiera_base_plus"]
+            ["sam2.1_hiera_base_plus", "sam2.1_hiera_tiny", "sam2.1_hiera_small", "sam2.1_hiera_large"]
         )
 
     # Choose inter frame dir
@@ -188,6 +201,11 @@ class SAMV2_min(QWidget):
     def on_mouse_click(self, layer, event):
         # Check if it is a middle mouse click event
         if event.button == 3:  # 3 represents the middle mouse button
+            # Mai: have to define labels layer first
+            if self.output_layers_combo.count() == 0:
+                show_info("Set output layer first.")
+                return
+
             if "Control" in event.modifiers:
                 # print(f'Ctrl + Middle mouse click at {event.position}')
                 point = [
@@ -219,10 +237,7 @@ class SAMV2_min(QWidget):
                 )
 
     def video_propagate(self):
-        # Changed by Mai
         self.pipeline_object.video_propagate()
-        # self.viewer.add_labels(label_input)
-        # self.viewer.add_labels(new_label)
 
     def reset_everything(self):
         self.pipeline_object.reset()

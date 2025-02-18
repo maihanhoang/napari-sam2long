@@ -6,8 +6,9 @@ import torch
 from PIL import Image
 from qtpy.QtWidgets import QWidget
 from sam2.build_sam import build_sam2_video_predictor
-import cv2 ### Added by Mai
-
+ ### Added by Mai
+import cv2
+from collections import defaultdict
 
 # Sam V2 pipeline class
 class SamV2_pipeline(QWidget):
@@ -36,13 +37,17 @@ class SamV2_pipeline(QWidget):
         model_cfg = model_cfg_name
 
         ### Changed by Mai
+        per_obj_png_file = True #TODO
         # self.predictor = build_sam2_video_predictor(model_cfg, sam2_checkpoint)
         self.predictor = build_sam2_video_predictor(
             model_cfg,
             sam2_checkpoint,
-            hydra_overrides_extra=[
-                "++model.sam_mask_decoder_extra_args.dynamic_multimask_via_stability=true",
-            ],
+            # hydra_overrides_extra=[
+            #     "++model.sam_mask_decoder_extra_args.dynamic_multimask_via_stability=true",
+            # ],
+            hydra_overrides_extra = [
+            "++model.non_overlap_masks=" + ("false" if per_obj_png_file else "true")
+            ]
         )
 
         self.preprocess_volume()
@@ -50,6 +55,11 @@ class SamV2_pipeline(QWidget):
         self.inference_state = self.predictor.init_state(
             video_path=self.source_frame_dir.as_posix()
         )
+        
+        ### Added by Mai for SAM2Long #Todo should not be hardcoded
+        self.inference_state['num_pathway'] = 3
+        self.inference_state['iou_thre'] = 0.3
+        self.inference_state['uncertainty'] = 1
 
         self.prompts = {}
 
@@ -93,9 +103,13 @@ class SamV2_pipeline(QWidget):
         # print(ann_obj_id)
 
         # Check if in dict else add it
+        
+        # Object has been annotated before
         if ann_obj_id in self.prompts:
             all_list = []
             for existing_list in self.prompts[ann_obj_id]:
+                
+                # in the same frame, If this frame has been annotated/prompted before
                 if existing_list[0] == ann_frame_idx:
                     points = existing_list[1]
                     labels = list(existing_list[2])
@@ -108,12 +122,14 @@ class SamV2_pipeline(QWidget):
                     ]
                     all_list.append(new_list)
                     check_if_our_z_is_new = False
+                # Frame has not been annotated before
                 else:
                     all_list.append(existing_list)
 
             self.prompts[ann_obj_id] = all_list
             check_if_our_annotation_is_new = False
-
+        
+        # Object has NOT been annotated before
         else:
             points = np.array(
                 [[point_array[2], point_array[1]]], dtype=np.float32
@@ -121,7 +137,8 @@ class SamV2_pipeline(QWidget):
             labels = np.array([neg_or_pos], np.int32)
             self.prompts[ann_obj_id] = [[ann_frame_idx, points, labels]]
 
-        if check_if_our_z_is_new and not (check_if_our_annotation_is_new):
+        # Object has been annotated but not in this frame
+        if check_if_our_z_is_new and not (check_if_our_annotation_is_new):            
             points = np.array(
                 [[point_array[2], point_array[1]]], dtype=np.float32
             )
@@ -132,12 +149,11 @@ class SamV2_pipeline(QWidget):
             )
             self.prompts[ann_obj_id] = existing_val
 
-        # print(labels,points,ann_frame_idx)
-
         layer_name = self.mwo.output_layers_combo.currentText()
         layer = self.viewer.layers[layer_name]
         label_layer_data = layer.data.astype(np.uint32) ## Type Changed by Mai
 
+        self.predictor.reset_state(self.inference_state)
         _, out_obj_ids, out_mask_logits = self.predictor.add_new_points_or_box(
             inference_state=self.inference_state,
             frame_idx=ann_frame_idx,
@@ -156,88 +172,77 @@ class SamV2_pipeline(QWidget):
 
         label_layer_data[ann_frame_idx, :, :] = mask_for_this_frame
         layer.data = label_layer_data 
-        ### Added by Mai
-        ### Remove and add again
-        # self.viewer.layers.remove(layer_name)
-        # self.viewer.add_labels(label_layer_data, name=layer_name)
-        # self.viewer.layers[layer_name].data = label_layer_data
-        # self.viewer.layers[layer_name].refresh(force=True)
+        
 
-    def video_propagate(self):
+    def video_propagate(self, per_obj_png_file=True):
         # run propagation throughout the video and collect the results in a dict
         layer_name = self.mwo.output_layers_combo.currentText()
         layer = self.viewer.layers[layer_name]
         label_layer_data = layer.data.copy() ### Added copy
-        label_layer_data_2 = label_layer_data.copy()
-        firsttime = True
+        # label_layer_data_2 = label_layer_data.copy()
 
-        self.viewer.add_labels(layer.data, name="input_label")
+        ######## SAM2Long ###########
+        object_ids = [0] # TODO
+        object_idx = 0
+        score_thresh = 0.0 # TODO
+        output_scores_per_object = defaultdict(dict)
 
-        print("Executing forward")
-        for (
-            out_frame_idx,
-            out_obj_ids,
-            out_mask_logits,
-        ) in self.predictor.propagate_in_video(
-            self.inference_state, start_frame_idx=0
-        ):
-            mask_for_this_frame = np.zeros(
-                (label_layer_data.shape[1], label_layer_data.shape[2]),
-                dtype=np.int32,
+        ###########################
+        # Enables manual drawing of mask with napari and using it
+        self.predictor.reset_state(self.inference_state)
+        self.predictor.add_new_mask(
+            inference_state=self.inference_state,
+            frame_idx=self.viewer.dims.current_step[0],
+            obj_id=0,
+            mask=label_layer_data[self.viewer.dims.current_step[0]],
+        )
+        ############################
+
+        _, out_mask_logits=self.predictor.propagate_in_video(self.inference_state, reverse=False,)
+        input_frame_idx = next(iter(self.inference_state['consolidated_frame_inds']['cond_frame_outputs']))
+        for frame_idx in range(input_frame_idx, self.inference_state['num_frames']):
+            output_scores_per_object[object_idx][frame_idx] = out_mask_logits[frame_idx-input_frame_idx].cpu().numpy()
+
+        video_segments = {}  # video_segments contains the per-frame segmentation results
+        print("Get per-frame segmentations.")
+        # for frame_idx in range(len(label_layer_data)):
+        for frame_idx in range(input_frame_idx, self.inference_state['num_frames']):
+            scores = torch.full(
+                size=(len(object_ids), 1, self.inference_state["video_height"], self.inference_state["video_width"]),
+                fill_value=-1024.0,
+                dtype=torch.float32,
             )
-            for i, out_obj_id in enumerate(out_obj_ids):
-                out_mask = (out_mask_logits[i] > 0.0).cpu().numpy()
-                # print(out_mask.shape)
-                mask_for_this_frame[out_mask[0] == True] = out_obj_id
+            for i, object_id in enumerate(object_ids):
+                if frame_idx in output_scores_per_object[object_id]:
+                    scores[i] = torch.from_numpy(
+                        output_scores_per_object[object_id][frame_idx]
+                    )
 
-            label_layer_data[out_frame_idx, :, :] = mask_for_this_frame
-            progress = int((out_frame_idx * 50) / label_layer_data.shape[0])
+            if not per_obj_png_file:
+                scores = self.predictor._apply_non_overlapping_constraints(scores)
+            per_obj_output_mask = {
+                object_id: (scores[i] > score_thresh).cpu().numpy()
+                for i, object_id in enumerate(object_ids)
+            }
+            video_segments[frame_idx] = per_obj_output_mask
+
+            for _, out_mask in video_segments[frame_idx].items():
+                label_layer_data[frame_idx, :, :] = out_mask
+
+            progress = int((frame_idx * 50) / label_layer_data.shape[0])
             self.mwo.video_propagation_progressBar.setValue(progress)
 
-        ### Changed by Mai
-        # print("Executing reverse")
-        # for (
-        #     out_frame_idx,
-        #     out_obj_ids,
-        #     out_mask_logits,
-        # ) in self.predictor.propagate_in_video(
-        #     self.inference_state,
-        #     start_frame_idx=label_layer_data.shape[0] - 1,
-        #     reverse=True,
-        # ):
-        #     mask_for_this_frame = np.zeros(
-        #         (label_layer_data.shape[1], label_layer_data.shape[2]),
-        #         dtype=np.int32,
-        #     )
-        #     for i, out_obj_id in enumerate(out_obj_ids):
-        #         out_mask = (out_mask_logits[i] > 0.0).cpu().numpy()
-        #         print(out_mask.shape)
-        #         mask_for_this_frame[out_mask[0] == True] = out_obj_id
-
-        #     label_layer_data_2[out_frame_idx, :, :] = mask_for_this_frame
-
-        #     if firsttime:
-        #         final_progress_here = int(
-        #             (out_frame_idx * 50) / label_layer_data.shape[0]
-        #         )
-        #         firsttime = False
-
-        #     progress = int((out_frame_idx * 50) / label_layer_data.shape[0])
-        #     progress = abs(final_progress_here - progress) + 50
-        #     self.mwo.video_propagation_progressBar.setValue(progress)
-
-        layer.data = np.maximum(label_layer_data, label_layer_data_2)
-        self.viewer.add_labels(np.maximum(label_layer_data, label_layer_data_2), name="new_label")
-        # layer.data = label_layer_data
-        # self.mwo.video_propagation_progressBar.setValue(progress)
+        layer.data = label_layer_data
         self.mwo.video_propagation_progressBar.setValue(100)
         
-        # return label_layer_data_input, layer.data
 
     def reset(self):
         self.predictor.reset_state(self.inference_state)
         layer_name = self.mwo.output_layers_combo.currentText()
-        layer = self.viewer.layers[layer_name]
-        label_layer_data = layer.data
-        zero_mask = np.zeros(label_layer_data.shape, dtype=np.int32)
-        layer.data = zero_mask
+        if layer_name is not None: # Mai
+            layer = self.viewer.layers[layer_name]
+            label_layer_data = layer.data
+            zero_mask = np.zeros(label_layer_data.shape, dtype=np.int32)
+            layer.data = zero_mask
+
+        self.prompts = {} # Empty prompts, Mai
