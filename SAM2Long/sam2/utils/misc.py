@@ -162,7 +162,7 @@ class AsyncVideoFrameLoader:
         img /= self.img_std
         if not self.offload_video_to_cpu:
             img = img.to(self.compute_device, non_blocking=True)
-        self.images[index] = img
+        # self.images[index] = img ### Changed by Mai
         return img
 
     def __len__(self):
