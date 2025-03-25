@@ -9,6 +9,9 @@ from sam2.build_sam import build_sam2_video_predictor
  ### Added by Mai
 import cv2
 from collections import defaultdict
+import tempfile
+import os
+import shutil
 
 # Sam V2 pipeline class
 class SamV2_pipeline(QWidget):
@@ -95,13 +98,33 @@ class SamV2_pipeline(QWidget):
         layer = self.viewer.layers[layer_name]
         volume = layer.data
 
-        # Create a source frame directory
-        self.source_frame_dir = Path(self.mwo.interdir_lineedt.text()) / Path(
-            layer_name
-        )
-        print("Creating the frame dir ", self.source_frame_dir)
-        self.source_frame_dir.mkdir(parents=True, exist_ok=True)
+    #         # Create a temporary directory
+    # with tempfile.TemporaryDirectory() as temp_dir:
+    #     # Example: Create a temporary file inside the directory
+    #     temp_file_path = os.path.join(temp_dir, layer_name)
+    #     with open(temp_file_path, "w") as f:
+    #         f.write("This is a temporary file.")
 
+    # # Create a temporary directory
+    # # Save each slice as a separate image
+    # with tempfile.TemporaryDirectory() as temp_dir:            
+    #     for i in range(volume.shape[0]):
+    #         slice_path = os.path.join(temp_dir, f"{i:04d}.jpeg")
+
+    #         if os.path.exists(slice_path):
+    #             continue
+
+    #         # If the slice path does not exists - create slices and save them
+            
+    #         ### Changed by Mai
+    #         # slice = volume[i, :, :]
+    #         # slice_array = Image.fromarray(slice)
+    #         # slice_array.save(slice_path)
+    #         slice = volume[i]
+    #         cv2.imwrite(slice_path, slice.squeeze())
+
+
+        self.source_frame_dir = Path(tempfile.mkdtemp())
         # Save each slice as a separate image
         for i in range(volume.shape[0]):
             slice_path = os.path.join(self.source_frame_dir, f"{i:04d}.jpeg")
@@ -119,6 +142,34 @@ class SamV2_pipeline(QWidget):
             cv2.imwrite(slice_path, slice.squeeze())
 
         print("Frames Generated")
+
+
+        # ##############################################################################
+        # # Create a source frame directory
+        # self.source_frame_dir = Path(self.mwo.interdir_lineedt.text()) / Path(
+        #     layer_name
+        # )
+        # print("Creating the frame dir ", self.source_frame_dir)
+        # self.source_frame_dir.mkdir(parents=True, exist_ok=True)
+
+        # # Save each slice as a separate image
+        # for i in range(volume.shape[0]):
+        #     slice_path = os.path.join(self.source_frame_dir, f"{i:04d}.jpeg")
+
+        #     if os.path.exists(slice_path):
+        #         continue
+
+        #     # If the slice path does not exists - create slices and save them
+            
+        #     ### Changed by Mai
+        #     # slice = volume[i, :, :]
+        #     # slice_array = Image.fromarray(slice)
+        #     # slice_array.save(slice_path)
+        #     slice = volume[i]
+        #     cv2.imwrite(slice_path, slice.squeeze())
+
+        # print("Frames Generated")
+
 
     def add_point(self, point_array, label_id, neg_or_pos=1):
         ann_frame_idx = point_array[0]
@@ -265,11 +316,19 @@ class SamV2_pipeline(QWidget):
 
     def reset(self):
         self.predictor.reset_state(self.inference_state)
-        layer_name = self.mwo.output_layers_combo.currentText()
-        if layer_name is not None: # Mai
-            layer = self.viewer.layers[layer_name]
-            label_layer_data = layer.data
+        label_layer_name = self.mwo.output_layers_combo.currentText()
+        if label_layer_name is not None and label_layer_name != '': # Mai
+            label_layer = self.viewer.layers[label_layer_name]
+            label_layer_data = label_layer.data
             zero_mask = np.zeros(label_layer_data.shape, dtype=np.int32)
-            layer.data = zero_mask
+            label_layer.data = zero_mask
 
         self.prompts = {} # Empty prompts, Mai
+        self.cleanup_temp_dir()
+        # shutil.rmtree(self.source_frame_dir) # Delete interframe storage, Mai
+
+
+    def cleanup_temp_dir(self):
+        """Deletes the temporary source frame directory"""
+        if self.source_frame_dir:
+            shutil.rmtree(self.source_frame_dir, ignore_errors=True)

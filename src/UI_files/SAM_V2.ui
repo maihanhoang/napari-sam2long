@@ -25,7 +25,7 @@
      <property name="verticalSpacing">
       <number>50</number>
      </property>
-     <item row="6" column="1">
+     <!-- <item row="6" column="1">
       <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0">
        <item>
         <widget class="QLineEdit" name="inter_lineedt"/>
@@ -38,7 +38,7 @@
         </widget>
        </item>
       </layout>
-     </item>
+     </item> -->
      <item row="12" column="1">
       <layout class="QVBoxLayout" name="verticalLayout">
        <property name="spacing">
@@ -88,7 +88,7 @@
        </property>
       </widget>
      </item>
-     <item row="6" column="0">
+     <!-- <item row="6" column="0">
       <widget class="QLabel" name="Inter_label">
        <property name="text">
         <string>Inter frame storage</string>
@@ -97,7 +97,7 @@
         <set>Qt::AlignCenter</set>
        </property>
       </widget>
-     </item>
+     </item> -->
      <item row="4" column="1">
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>

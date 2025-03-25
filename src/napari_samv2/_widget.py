@@ -12,6 +12,7 @@ from qtpy.QtWidgets import (
     QProgressBar,
     QPushButton,
     QWidget,
+    QApplication,
 )
 # Imported by Mai
 from napari.utils.notifications import show_info
@@ -22,6 +23,7 @@ class SAMV2_min(QWidget):
         # Initializing
         super().__init__()
         self.viewer = napari_viewer
+        self.appInstance = QApplication.instance() # Mai, for deleting tmp dir
 
         # Load the UI file - Main window
         script_dir = os.path.dirname(__file__)
@@ -35,10 +37,10 @@ class SAMV2_min(QWidget):
         self.image_layers_combo = self.findChild(
             QComboBox, "Image_layer_combo"
         )
-        self.interdir_lineedt = self.findChild(QLineEdit, "inter_lineedt")
-        self.interdir_browse_btn = self.findChild(
-            QPushButton, "inter_browse_btn"
-        )
+        # self.interdir_lineedt = self.findChild(QLineEdit, "inter_lineedt")
+        # self.interdir_browse_btn = self.findChild(
+        #     QPushButton, "inter_browse_btn"
+        # )
         self.output_layers_combo = self.findChild(
             QComboBox, "output_layer_combo"
         )
@@ -61,9 +63,11 @@ class SAMV2_min(QWidget):
         self.viewer.layers.events.removed.connect(self.layer_changed)
         self.viewer.layers.events.changed.connect(self.layer_changed)
         self.viewer.mouse_drag_callbacks.append(self.on_mouse_click)
+        # self.viewer.events.closed.connect(self.cleanup_temp_dir_upon_close)
+        self.appInstance.lastWindowClosed.connect(self.cleanup_temp_dir) 
 
         # Connect button to functions
-        self.interdir_browse_btn.clicked.connect(self.choose_inter_frame_dir)
+        # self.interdir_browse_btn.clicked.connect(self.choose_inter_frame_dir)
         self.initialize_btn.clicked.connect(self.initialize_pipeline)
         self.video_propagate_btn.clicked.connect(self.video_propagate)
         self.reset_btn.clicked.connect(self.reset_everything)
@@ -111,18 +115,17 @@ class SAMV2_min(QWidget):
         self.populate_combo_box(self.image_layers_combo, "image")
         self.populate_combo_box(self.output_layers_combo, "label")
 
-    # Choose inter frame dir
     def populate_model_combo(self):
         self.model_cbbox.clear()
         self.model_cbbox.addItems(
             ["sam2.1_hiera_base_plus", "sam2.1_hiera_tiny", "sam2.1_hiera_small", "sam2.1_hiera_large"]
         )
 
-    # Choose inter frame dir
-    def choose_inter_frame_dir(self):
-        dname = QFileDialog.getExistingDirectory()
-        print(dname)
-        self.interdir_lineedt.setText(str(dname))
+    # # Choose inter frame dir
+    # def choose_inter_frame_dir(self):
+    #     dname = QFileDialog.getExistingDirectory()
+    #     print(dname)
+    #     self.interdir_lineedt.setText(str(dname))
 
     # # Initialize pipeline
     # BASE_URL = "https://dl.fbaipublicfiles.com/segment_anything_2/072824/"
@@ -142,10 +145,13 @@ class SAMV2_min(QWidget):
         "sam2.1_hiera_large": "sam2.1_hiera_large.pt",
     }
 
-
     def initialize_pipeline(self):
-        script_dir = os.path.dirname(__file__)
+        # Reset everything 
+        if hasattr(self, 'pipeline_object'):
+            self.reset_everything()
+            self.cleanup_temp_dir()
 
+        script_dir = os.path.dirname(__file__)
         model_map = {
             "sam2.1_hiera_large": ("configs/sam2.1/sam2.1_hiera_l.yaml", "sam2.1_hiera_large.pt"),
             "sam2.1_hiera_small": ("configs/sam2.1/sam2.1_hiera_s.yaml", "sam2.1_hiera_small.pt"),
@@ -201,6 +207,12 @@ class SAMV2_min(QWidget):
     def on_mouse_click(self, layer, event):
         # Check if it is a middle mouse click event
         if event.button == 3:  # 3 represents the middle mouse button
+            # Mai: Check if pipeline has been initialized
+            ##TODO: check if pipeline_object attribute exists
+            if not hasattr(self, 'pipeline_object'):
+                show_info("Please initialize first.")
+                return
+            
             # Mai: have to define labels layer first
             if self.output_layers_combo.count() == 0:
                 show_info("Set output layer first.")
@@ -240,4 +252,9 @@ class SAMV2_min(QWidget):
         self.pipeline_object.video_propagate()
 
     def reset_everything(self):
-        self.pipeline_object.reset()
+        if hasattr(self, "pipeline_object"):
+            self.pipeline_object.reset()
+
+    def cleanup_temp_dir(self):
+        """Deletes the temporary source frame directory when Napari closes."""
+        self.pipeline_object.cleanup_temp_dir()
