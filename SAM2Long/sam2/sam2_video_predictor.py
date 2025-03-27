@@ -42,6 +42,7 @@ class SAM2VideoPredictor(SAM2Base):
         self.clear_non_cond_mem_around_input = clear_non_cond_mem_around_input
         self.clear_non_cond_mem_for_multi_obj = clear_non_cond_mem_for_multi_obj
         self.add_all_frames_to_correct_as_cond = add_all_frames_to_correct_as_cond
+        self.mem_pick_indexs = 0 ### Added by Mai
 
     @torch.inference_mode()
     def init_state(
@@ -665,6 +666,7 @@ class SAM2VideoPredictor(SAM2Base):
             input_frames_inds.update(mask_inputs_per_frame.keys())
         assert all_consolidated_frame_inds == input_frames_inds
 
+
     @torch.inference_mode()
     def propagate_in_video(
         self,
@@ -705,7 +707,7 @@ class SAM2VideoPredictor(SAM2Base):
             )
             processing_order = range(start_frame_idx, end_frame_idx + 1)
 
-        mem_pick_indexs = 0 ###initialize the memory index
+        self.mem_pick_indexs = 0 ###initialize the memory index #### Mai for progress bar
         for frame_idx in tqdm(processing_order, desc="propagate in video"):
             # We skip those frames already in consolidated outputs (these are frames
             # that received input clicks or mask). Note that we cannot directly run
@@ -724,7 +726,7 @@ class SAM2VideoPredictor(SAM2Base):
                 pred_masks = current_out["pred_masks"]
             else:
                 storage_key = "non_cond_frame_outputs"
-                current_out, _, mem_pick_indexs = self._run_single_frame_inference(
+                current_out, _, self.mem_pick_indexs = self._run_single_frame_inference(
                     inference_state=inference_state,
                     output_dict=output_dict,
                     frame_idx=frame_idx,
@@ -734,32 +736,28 @@ class SAM2VideoPredictor(SAM2Base):
                     mask_inputs=None,
                     reverse=reverse,
                     run_mem_encoder=True,
-                    mem_pick_indexs=mem_pick_indexs,
+                    mem_pick_indexs=self.mem_pick_indexs,
                     start_frame_idx=start_frame_idx,
                 )
                 output_dict[storage_key][frame_idx] = current_out
+            yield frame_idx
+
+        
+    @torch.inference_mode()
+    def get_propagated_masks(self, inference_state):
+        output_dict = inference_state["output_dict"]
+        num_frames = inference_state["num_frames"]
+        start_frame_idx = min(output_dict["cond_frame_outputs"])
+
         mask = [self._get_orig_video_res_output(inference_state, output_dict["cond_frame_outputs"][start_frame_idx]["pred_masks"])[1]]
         for i in range(start_frame_idx+1, num_frames):
             mask.append(
                 self._get_orig_video_res_output(
                     inference_state, 
-                    output_dict["non_cond_frame_outputs"][i]["pred_masks"][...,mem_pick_indexs[0][i]])[1]
+                    output_dict["non_cond_frame_outputs"][i]["pred_masks"][...,self.mem_pick_indexs[0][i]])[1]
                     )
-        return obj_ids, mask
+        return mask
 
-        # Create slices of per-object outputs for subsequent interaction with each
-        # individual object after tracking.
-        # self._add_output_per_object(
-        #     inference_state, frame_idx, current_out, storage_key
-        # )
-        # inference_state["frames_already_tracked"][frame_idx] = {"reverse": reverse}
-
-        # # Resize the output mask to the original video resolution (we directly use
-        # # the mask scores on GPU for output to avoid any CPU conversion in between)
-        # _, video_res_masks = self._get_orig_video_res_output(
-        #     inference_state, pred_masks
-        # )
-        # yield frame_idx, obj_ids, video_res_masks
 
     def _add_output_per_object(
         self, inference_state, frame_idx, current_out, storage_key
