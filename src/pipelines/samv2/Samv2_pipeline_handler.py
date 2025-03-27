@@ -12,6 +12,8 @@ from collections import defaultdict
 import tempfile
 import os
 import shutil
+# Imported by Mai
+from napari.utils.notifications import show_info
 
 # Sam V2 pipeline class
 class SamV2_pipeline(QWidget):
@@ -29,14 +31,6 @@ class SamV2_pipeline(QWidget):
             None  # Will be set inside process volume function
         )
 
-        # # torch autocast - following samv2 recommended execution code
-        # torch.autocast(device_type="cuda", dtype=torch.bfloat16).__enter__()
-        # if torch.cuda.get_device_properties(0).major >= 8:
-        #     torch.backends.cuda.matmul.allow_tf32 = True
-        #     torch.backends.cudnn.allow_tf32 = True
-
-        # DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
         ######## Mai ########
         # select the device for computation
         if torch.cuda.is_available():
@@ -45,7 +39,7 @@ class SamV2_pipeline(QWidget):
             device = torch.device("mps")
         else:
             device = torch.device("cpu")
-        print(f"using device: {device}")
+        print(f"Using device: {device}")
 
         if device.type == "cuda":
             # use bfloat16 for the entire notebook
@@ -98,32 +92,6 @@ class SamV2_pipeline(QWidget):
         layer = self.viewer.layers[layer_name]
         volume = layer.data
 
-    #         # Create a temporary directory
-    # with tempfile.TemporaryDirectory() as temp_dir:
-    #     # Example: Create a temporary file inside the directory
-    #     temp_file_path = os.path.join(temp_dir, layer_name)
-    #     with open(temp_file_path, "w") as f:
-    #         f.write("This is a temporary file.")
-
-    # # Create a temporary directory
-    # # Save each slice as a separate image
-    # with tempfile.TemporaryDirectory() as temp_dir:            
-    #     for i in range(volume.shape[0]):
-    #         slice_path = os.path.join(temp_dir, f"{i:04d}.jpeg")
-
-    #         if os.path.exists(slice_path):
-    #             continue
-
-    #         # If the slice path does not exists - create slices and save them
-            
-    #         ### Changed by Mai
-    #         # slice = volume[i, :, :]
-    #         # slice_array = Image.fromarray(slice)
-    #         # slice_array.save(slice_path)
-    #         slice = volume[i]
-    #         cv2.imwrite(slice_path, slice.squeeze())
-
-
         self.source_frame_dir = Path(tempfile.mkdtemp())
         # Save each slice as a separate image
         for i in range(volume.shape[0]):
@@ -132,8 +100,6 @@ class SamV2_pipeline(QWidget):
             if os.path.exists(slice_path):
                 continue
 
-            # If the slice path does not exists - create slices and save them
-            
             ### Changed by Mai
             # slice = volume[i, :, :]
             # slice_array = Image.fromarray(slice)
@@ -141,34 +107,7 @@ class SamV2_pipeline(QWidget):
             slice = volume[i]
             cv2.imwrite(slice_path, slice.squeeze())
 
-        print("Frames Generated")
-
-
-        # ##############################################################################
-        # # Create a source frame directory
-        # self.source_frame_dir = Path(self.mwo.interdir_lineedt.text()) / Path(
-        #     layer_name
-        # )
-        # print("Creating the frame dir ", self.source_frame_dir)
-        # self.source_frame_dir.mkdir(parents=True, exist_ok=True)
-
-        # # Save each slice as a separate image
-        # for i in range(volume.shape[0]):
-        #     slice_path = os.path.join(self.source_frame_dir, f"{i:04d}.jpeg")
-
-        #     if os.path.exists(slice_path):
-        #         continue
-
-        #     # If the slice path does not exists - create slices and save them
-            
-        #     ### Changed by Mai
-        #     # slice = volume[i, :, :]
-        #     # slice_array = Image.fromarray(slice)
-        #     # slice_array.save(slice_path)
-        #     slice = volume[i]
-        #     cv2.imwrite(slice_path, slice.squeeze())
-
-        # print("Frames Generated")
+        print("Frames generated.")
 
 
     def add_point(self, point_array, label_id, neg_or_pos=1):
@@ -178,7 +117,6 @@ class SamV2_pipeline(QWidget):
         new_label = neg_or_pos
         check_if_our_z_is_new = True
         check_if_our_annotation_is_new = True
-        # print(ann_obj_id)
 
         # Check if in dict else add it
         
@@ -239,13 +177,17 @@ class SamV2_pipeline(QWidget):
             points=points,
             labels=labels,
         )
+
+        if label_layer_data[0].shape != out_mask_logits[0][0].cpu().numpy().shape:
+            show_info("Reset & initialize before processing new data.")
+            return
+
         mask_for_this_frame = np.zeros(
             (label_layer_data.shape[1], label_layer_data.shape[2]),
             dtype=np.int32,
         )
         for i, out_obj_id in enumerate(out_obj_ids):
             out_mask = (out_mask_logits[i] > 0.0).cpu().numpy()
-            # print(out_mask.shape)
             mask_for_this_frame[out_mask[0] == True] = out_obj_id
 
         label_layer_data[ann_frame_idx, :, :] = mask_for_this_frame
@@ -257,9 +199,23 @@ class SamV2_pipeline(QWidget):
         layer_name = self.mwo.output_layers_combo.currentText()
         layer = self.viewer.layers[layer_name]
         label_layer_data = layer.data.copy() ### Added copy
-        # label_layer_data_2 = label_layer_data.copy()
-
-        ######## SAM2Long ###########
+        label_no = label_layer_data.max() # label_number for different colors in napari 
+        
+        # Check that only one label was provided
+        if len(np.unique(label_layer_data)) != 2:
+            if len(np.unique(label_layer_data)) == 1:
+                show_info("No label for this label layer.")
+                return
+            else:
+                show_info("Only one label per label layer allowed.")
+                return
+            
+        # Check that number of images in viewer and in temporary directory match
+        if len(list(self.source_frame_dir.glob("*"))) != len(label_layer_data):
+            show_info("Reset & initialize before processing new data.")
+            return
+        
+        ######## SAM2Long Parameters ###########
         object_ids = [0] # TODO
         object_idx = 0
         score_thresh = 0.0 # TODO
@@ -276,14 +232,58 @@ class SamV2_pipeline(QWidget):
         )
         ############################
 
-        _, out_mask_logits=self.predictor.propagate_in_video(self.inference_state, reverse=False,)
+        # _, out_mask_logits=self.predictor.propagate_in_video(self.inference_state, reverse=False,)
+        # input_frame_idx = next(iter(self.inference_state['consolidated_frame_inds']['cond_frame_outputs']))
+        # for frame_idx in range(input_frame_idx, self.inference_state['num_frames']):
+        #     output_scores_per_object[object_idx][frame_idx] = out_mask_logits[frame_idx-input_frame_idx].cpu().numpy()
+
+        # video_segments = {}  # video_segments contains the per-frame segmentation results
+        # print("Get per-frame segmentations.")
+
+        # for frame_idx in range(input_frame_idx, self.inference_state['num_frames']):
+        #     scores = torch.full(
+        #         size=(len(object_ids), 1, self.inference_state["video_height"], self.inference_state["video_width"]),
+        #         fill_value=-1024.0,
+        #         dtype=torch.float32,
+        #     )
+        #     for i, object_id in enumerate(object_ids):
+        #         if frame_idx in output_scores_per_object[object_id]:
+        #             scores[i] = torch.from_numpy(
+        #                 output_scores_per_object[object_id][frame_idx]
+        #             )
+
+        #     if not per_obj_png_file:
+        #         scores = self.predictor._apply_non_overlapping_constraints(scores)
+        #     per_obj_output_mask = {
+        #         object_id: (scores[i] > score_thresh).cpu().numpy()
+        #         for i, object_id in enumerate(object_ids)
+        #     }
+        #     video_segments[frame_idx] = per_obj_output_mask
+
+        #     for _, out_mask in video_segments[frame_idx].items():
+        #         label_layer_data[frame_idx, :, :] = out_mask * label_no
+
+        #     progress = int((frame_idx * 50) / label_layer_data.shape[0])
+        #     self.mwo.video_propagation_progressBar.setValue(progress)
+
+
+        ############################
+        print("Get per-frame segmentations.")
+        for frame_idx in self.predictor.propagate_in_video(
+            self.inference_state,
+            reverse=False,
+        ):
+            progress = int((frame_idx * 100) / label_layer_data.shape[0])
+            self.mwo.video_propagation_progressBar.setValue(progress)
+
+        # _, out_mask_logits=self.predictor.propagate_in_video(self.inference_state, reverse=False,)
+        out_mask_logits=self.predictor.get_propagated_masks(self.inference_state)
         input_frame_idx = next(iter(self.inference_state['consolidated_frame_inds']['cond_frame_outputs']))
         for frame_idx in range(input_frame_idx, self.inference_state['num_frames']):
             output_scores_per_object[object_idx][frame_idx] = out_mask_logits[frame_idx-input_frame_idx].cpu().numpy()
-
+        
         video_segments = {}  # video_segments contains the per-frame segmentation results
-        print("Get per-frame segmentations.")
-        # for frame_idx in range(len(label_layer_data)):
+        
         for frame_idx in range(input_frame_idx, self.inference_state['num_frames']):
             scores = torch.full(
                 size=(len(object_ids), 1, self.inference_state["video_height"], self.inference_state["video_width"]),
@@ -305,10 +305,7 @@ class SamV2_pipeline(QWidget):
             video_segments[frame_idx] = per_obj_output_mask
 
             for _, out_mask in video_segments[frame_idx].items():
-                label_layer_data[frame_idx, :, :] = out_mask
-
-            progress = int((frame_idx * 50) / label_layer_data.shape[0])
-            self.mwo.video_propagation_progressBar.setValue(progress)
+                label_layer_data[frame_idx, :, :] = out_mask * label_no
 
         layer.data = label_layer_data
         self.mwo.video_propagation_progressBar.setValue(100)
@@ -324,7 +321,7 @@ class SamV2_pipeline(QWidget):
             label_layer.data = zero_mask
 
         self.prompts = {} # Empty prompts, Mai
-        self.cleanup_temp_dir()
+        # self.cleanup_temp_dir()
         # shutil.rmtree(self.source_frame_dir) # Delete interframe storage, Mai
 
 

@@ -90,6 +90,7 @@ class SAMV2_min(QWidget):
                 layer.name
                 for layer in self.viewer.layers
                 if isinstance(layer, napari.layers.Image)
+                and len(layer.data.shape) == 3 # only add to combobox if the data is 3D
             ]
         elif layer_type == "label":
             # Get all existing label layers from the napari viewer
@@ -121,32 +122,17 @@ class SAMV2_min(QWidget):
             ["sam2.1_hiera_base_plus", "sam2.1_hiera_tiny", "sam2.1_hiera_small", "sam2.1_hiera_large"]
         )
 
-    # # Choose inter frame dir
-    # def choose_inter_frame_dir(self):
-    #     dname = QFileDialog.getExistingDirectory()
-    #     print(dname)
-    #     self.interdir_lineedt.setText(str(dname))
-
-    # # Initialize pipeline
-    # BASE_URL = "https://dl.fbaipublicfiles.com/segment_anything_2/072824/"
-    # CHECKPOINTS = {
-    #     "sam2_hiera_tiny": "sam2_hiera_tiny.pt",
-    #     "sam2_hiera_small": "sam2_hiera_small.pt",
-    #     "sam2_hiera_base_plus": "sam2_hiera_base_plus.pt",
-    #     "sam2_hiera_large": "sam2_hiera_large.pt",
-    # }
-
-        # Initialize pipeline
+    # Initialize pipeline
     BASE_URL = "https://dl.fbaipublicfiles.com/segment_anything_2/092824/"
     CHECKPOINTS = {
-        "sam2.1_hiera_tiny": "sam2.1_hiera_tiny.pt",
-        "sam2.1_hiera_small": "sam2.1_hiera_small.pt",
-        "sam2.1_hiera_base_plus": "sam2.1_hiera_base_plus.pt",
         "sam2.1_hiera_large": "sam2.1_hiera_large.pt",
+        "sam2.1_hiera_small": "sam2.1_hiera_small.pt",
+        "sam2.1_hiera_tiny": "sam2.1_hiera_tiny.pt",
+        "sam2.1_hiera_base_plus": "sam2.1_hiera_base_plus.pt",
     }
 
     def initialize_pipeline(self):
-        # Reset everything 
+        # Reset
         if hasattr(self, 'pipeline_object'):
             self.reset_everything()
             self.cleanup_temp_dir()
