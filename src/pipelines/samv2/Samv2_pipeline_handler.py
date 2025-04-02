@@ -320,7 +320,10 @@ class SamV2_pipeline(QWidget):
             zero_mask = np.zeros(label_layer_data.shape, dtype=np.int32)
             label_layer.data = zero_mask
 
-        self.prompts = {} # Empty prompts, Mai
+        # Added by Mai
+        self.prompts = {} # Empty prompts, Ma
+        self.mwo.video_propagation_progressBar.setValue(0)
+        
         # self.cleanup_temp_dir()
         # shutil.rmtree(self.source_frame_dir) # Delete interframe storage, Mai
 
