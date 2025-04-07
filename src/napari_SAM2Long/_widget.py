@@ -4,7 +4,7 @@ import napari
 import requests
 import shutil
 import glob
-from pipelines.samv2.Samv2_pipeline_handler import SamV2_pipeline
+from pipelines.sam2long.SAM2Long_pipeline_handler import SAM2Long_pipeline
 from qtpy import uic
 from qtpy.QtWidgets import (
     QComboBox,
@@ -17,7 +17,7 @@ from napari.utils.notifications import show_info
 
 
 # Main Plugin class that is connected from outside at napari plugin entry point
-class SAMV2_min(QWidget):
+class SAM2Long(QWidget):
     def __init__(self, napari_viewer):
         # Initializing
         super().__init__()
@@ -26,7 +26,7 @@ class SAMV2_min(QWidget):
 
         # Load the UI file - Main window
         script_dir = os.path.dirname(__file__)
-        ui_file_name = "SAM_V2.ui"
+        ui_file_name = "SAM2Long.ui"
         abs_file_path = os.path.join(
             script_dir, "..", "UI_files", ui_file_name
         )
@@ -179,7 +179,7 @@ class SAMV2_min(QWidget):
                 )
                 self.download_checkpoint(checkpoint_name, checkpoint_path)
             print("Model_cfg ", model_cfg_path)
-            self.pipeline_object = SamV2_pipeline(
+            self.pipeline_object = SAM2Long_pipeline(
                 self.viewer,
                 self,
                 checkpoint_path,

@@ -1,29 +1,29 @@
 [project]
-name = "napari-SAMV2"
+name = "napari-sam2long"
 dynamic = ["version"]
-description = "Napari plugin for segment anything version 2 model from meta. Plugin primarily useful for segmenting 3d volumetric data or 3d time series data. "
+description = "A plugin for interactive 3D (volumetric or time-lapse) segmentation using Meta's Segment Anything Model 2 (SAM2)."
 readme = "README.md"
 license = {file = "LICENSE"}
 authors = [
-  {name = "Krishnan Venkataraman"},
-  {email = "krishvraman95@gmail.com"},
+  {name = "Mai Hoang"},
+  {email = "maihan.hoang1208@gmail.com"},
 ]
 classifiers = [
     "Development Status :: 2 - Pre-Alpha",
     "Framework :: napari",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: BSD License",
+    "License :: OSI Approved :: Apache Software License",
     "Operating System :: OS Independent",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Topic :: Scientific/Engineering :: Image Processing",
 ]
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 dependencies = [
     "numpy",
     "magicgui",
@@ -39,17 +39,16 @@ testing = [
     "pytest-qt",  # https://pytest-qt.readthedocs.io/en/latest/
     "napari",
     "pyqt5",
-    "numpy",
 ]
 
 [project.entry-points."napari.manifest"]
-napari-SAMV2 = "napari_samv2:napari.yaml"
+napari-sam2long = "napari_sam2long:napari.yaml"
 
 [project.urls]
-"Bug Tracker" = "https://github.com/Krishvraman/napari-SAMV2/issues"
-"Documentation" = "https://github.com/Krishvraman/napari-SAMV2#README.md"
-"Source Code" = "https://github.com/Krishvraman/napari-SAMV2"
-"User Support" = "https://github.com/Krishvraman/napari-SAMV2/issues"
+"Bug Tracker" = "https://github.com/maihanhoang/napari-sam2long/issues"
+"Documentation" = "https://github.com/maihanhoang/napari-sam2long#README.md"
+"Source Code" = "https://github.com/maihanhoang/napari-sam2long"
+"User Support" = "https://github.com/maihanhoang/napari-sam2long/issues"
 
 [build-system]
 requires = ["setuptools>=42.0.0", "wheel", "setuptools_scm"]
@@ -66,12 +65,13 @@ where = ["src"]
 
 
 [tool.setuptools_scm]
-write_to = "src/napari_samv2/_version.py"
+write_to = "src/napari_sam2long/_version.py"
+fallback_version = "0.0.1+nogit"
 
 
 [tool.black]
 line-length = 79
-target-version = ['py38', 'py39', 'py310']
+target-version = ['py310', 'py311', 'py312', 'py313']
 
 [tool.ruff]
 line-length = 79
@@ -116,5 +116,5 @@ exclude = [
     "*_vendor*",
 ]
 
-target-version = "py38"
+target-version = "py310"
 fix = true

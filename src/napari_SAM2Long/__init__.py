@@ -4,6 +4,6 @@ except ImportError:
     __version__ = "unknown"
 
 
-from ._widget import SAMV2_min
+from ._widget import SAM2Long
 
-__all__ = ("SAMV2_min",)
+__all__ = ("SAM2Long",)
