@@ -46,26 +46,29 @@ Please see the official [SAM 2](https://github.com/facebookresearch/sam2) repo a
 
 ## Usage
 
-### Segment & track first object
-1. Open a 3D tif in napari, make sure it is in TYX or ZYX format
+### Segmenting & tracking first object
+1. Open a 3D tiff in napari, make sure it is in TYX or ZYX format
 2. Select the image in the drop-down menu of *Input*
 3. Add a new [labels layer](https://napari.org/0.5.0/howtos/layers/labels.html) to the viewer and select it in the drop-down menu of *Labels* 
+    Note: The labels layer should always be added to the viewer after the input image to match the dimensions.  
 4. Select the *Model*
-5. Click *Initialize* to load the image/video and initialize the inference state
+5. Click *Initialize* to load the image and initialize the inference state
 6. Select an object on any frame and get an initial mask with
     - the *mouse middle click* to get the model's mask prediction
         (*mouse middle click* to add and *Ctrl+mouse middle click* to remove areas) and/or
     - napari's [labels layers tools](https://napari.org/0.5.0/howtos/layers/labels.html#gui-tools-for-the-labels-layer) (e.g. paintbrush, eraser etc.) to manually draw a mask
 
     Note: When the model fails to segment the desired object with the point prompts using *(Ctrl+) mouse middle click*, manually drawing/correcting the mask with napari's labels layer tools can be very useful
-
+    
 7. Once satisfied with the initial mask, click *Propagate from current frame* to obtain segmentations for all subsequent frames. The result will be added to the labels layer. 
+    
+    Note: *Propagate from current frame* computes the masklets only for the subsequent frames to reduce computation time and does not affect any masklets of the previous frames. Only the mask of the current frame propagation is started from is considered in the prediction, any prompts made in previous and subsequent frames are not regarded.
     
 ### Making corrections
 8. Re-draw a new mask on any frame by using the *(Ctrl+) mouse middle click* to (remove) add regions and/or napari's labels layers tools.
 9. *Propagate from current frame* to re-run the model's predictions with the new mask
 
-Note: When making corrections and "re-defining" the masks, this plugin treats the corrected mask as a new initial mask and disregards any previous prompts. *Propagate from current frame* computes the masklets for the subsequent frames anew and does not affect the masklets of the previous frames. 
+Note: When making corrections and "re-defining" the masks, this plugin treats the corrected mask as a new initial mask and disregards any previous prompts on this frame. 
 
 ### Segmenting another object in the same image/video
 10. Save labels layer with the segmentation result of previous object
