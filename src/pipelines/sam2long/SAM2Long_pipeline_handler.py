@@ -13,10 +13,6 @@ from qtpy.QtWidgets import QWidget
 
 # Sam2Long pipeline class
 class SAM2Long_pipeline(QWidget):
-    # @pytest.mark.skipif(
-    #     "torch" not in globals() or "sam2" not in globals(),
-    #     reason="requires torch and sam2",
-    # )
     def __init__(
         self,
         napari_viewer,
@@ -24,9 +20,6 @@ class SAM2Long_pipeline(QWidget):
         checkpoint_path,
         model_cfg_name,
     ):
-
-        # import torch
-        # from sam2.build_sam import build_sam2_video_predictor
 
         build_sam2_video_predictor = pytest.importorskip(
             "sam2.build_sam.build_sam2_video_predictor"
@@ -206,10 +199,7 @@ class SAM2Long_pipeline(QWidget):
         label_layer_data[ann_frame_idx, :, :] = mask_for_this_frame
         layer.data = label_layer_data
 
-    # @pytest.mark.skipif("torch" not in globals(), reason="requires torch")
     def video_propagate(self, per_obj_png_file=True):
-
-        # import torch
 
         torch = pytest.importorskip("torch")
 
