@@ -6,7 +6,9 @@ from pathlib import Path
 
 import cv2
 import numpy as np
-import torch
+import pytest
+
+# import torch
 from napari.utils.notifications import show_info
 from qtpy.QtWidgets import QWidget
 from sam2.build_sam import build_sam2_video_predictor
@@ -14,6 +16,7 @@ from sam2.build_sam import build_sam2_video_predictor
 
 # Sam2Long pipeline class
 class SAM2Long_pipeline(QWidget):
+    @pytest.mark.skipif("torch" not in globals(), reason="requires torch")
     def __init__(
         self,
         napari_viewer,
@@ -21,6 +24,9 @@ class SAM2Long_pipeline(QWidget):
         checkpoint_path,
         model_cfg_name,
     ):
+
+        import torch
+
         super().__init__()
         self.viewer = napari_viewer
         self.mwo = main_window_object
@@ -194,7 +200,11 @@ class SAM2Long_pipeline(QWidget):
         label_layer_data[ann_frame_idx, :, :] = mask_for_this_frame
         layer.data = label_layer_data
 
+    @pytest.mark.skipif("torch" not in globals(), reason="requires torch")
     def video_propagate(self, per_obj_png_file=True):
+
+        import torch
+
         # run propagation throughout the video and collect the results in a dict
         layer_name = self.mwo.output_layers_combo.currentText()
         layer = self.viewer.layers[layer_name]
