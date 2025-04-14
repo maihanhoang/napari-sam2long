@@ -75,7 +75,7 @@ class SAM2Long(QWidget):
         current_text = combobx.currentText() if combobx else None
 
         # Clear the combo box first
-        combobx.clear()
+        combobx.clear() if combobx else None
 
         if layer_type == "image":
             # Get all existing image layers from the napari viewer
