@@ -12,8 +12,6 @@
 A plugin for interactive 3D (volumetric or time-lapse) segmentation using Meta's Segment Anything Model 2 (SAM2).
 
 ----------------------------------
-*placeholder for gif*
-
 Designed for bioimaging researchers working with 3D volumetric or time-lapse images, this plugin supports TIFF files in ZYX or TYX format. Users can provide input and make corrections through point clicks or manually drawn masks.
 
 The tool leverages the [SAM2Long](https://github.com/Mark12Ding/SAM2Long) model, an optimized version of [Meta's SAM 2](https://github.com/facebookresearch/sam2) with enhancements to the memory module for improved performance on long videos. It was built to support long videos, but it remains effective for shorter videos as well.
@@ -31,11 +29,11 @@ https://napari.org/stable/plugins/index.html
 ## Installation
 Please see the official [SAM 2](https://github.com/facebookresearch/sam2) repo and the [INSTALL.md](https://github.com/facebookresearch/sam2/blob/main/INSTALL.md) for notes and FAQs on potential installation issues.
 
-1. Create a new conda environment and install napari:
+1. Create a new conda environment with python>=3.10 and install napari:
     ```bash
     conda create -n napari-sam2long python==3.10
     conda activate napari-sam2long
-    conda install -c conda-forge napari pyqt
+    python -m pip install "napari[all]"
     ```
 
 2. Install PyTorch and TorchVision. Select preferences [here](https://pytorch.org/get-started/locally/) to find correct installation command.
@@ -46,15 +44,15 @@ Please see the official [SAM 2](https://github.com/facebookresearch/sam2) repo a
     pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126
     ```
 
-3. Install SAM 2 using:
+3. Install SAM2Long:
     ```bash
-    git clone https://github.com/facebookresearch/sam2.git && cd sam2
+    git clone git@github.com:maihanhoang/napari-sam2long.git
 
-    pip install -e .
+    cd napari-sam2long/SAM2Long && pip install -e .
     ```
-4. You can install `napari-sam2long` via [pip]:
+4. Install napari-SAM2Long plugin:
     ```bash
-    pip install napari-sam2long
+    cd .. && pip install e .
     ```
 
 ## Usage

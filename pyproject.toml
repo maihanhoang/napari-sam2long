@@ -29,6 +29,7 @@ dependencies = [
     "magicgui",
     "qtpy",
     "scikit-image",
+    "opencv-python",
 ]
 
 [project.optional-dependencies]
@@ -39,7 +40,6 @@ testing = [
     "pytest-qt",  # https://pytest-qt.readthedocs.io/en/latest/
     "napari",
     "pyqt5",
-    "opencv-python",
 ]
 
 [project.entry-points."napari.manifest"]
