@@ -7,16 +7,13 @@ from pathlib import Path
 import cv2
 import numpy as np
 import pytest
-
-# import torch
 from napari.utils.notifications import show_info
 from qtpy.QtWidgets import QWidget
-from sam2.build_sam import build_sam2_video_predictor
 
 
 # Sam2Long pipeline class
 class SAM2Long_pipeline(QWidget):
-    @pytest.mark.skipif("torch" not in globals(), reason="requires torch")
+    @pytest.mark.skip(reason="requires torch and sam2")
     def __init__(
         self,
         napari_viewer,
@@ -26,6 +23,7 @@ class SAM2Long_pipeline(QWidget):
     ):
 
         import torch
+        from sam2.build_sam import build_sam2_video_predictor
 
         super().__init__()
         self.viewer = napari_viewer
