@@ -36,7 +36,7 @@ class SAM2Long(QWidget):
 
         # Get required children for functionality addition
         self.image_layers_combo = self.findChild(
-            QComboBox, "Image_layer_combo"
+            QComboBox, "image_layer_combo"
         )
         self.output_layers_combo = self.findChild(
             QComboBox, "output_layer_combo"
@@ -136,6 +136,9 @@ class SAM2Long(QWidget):
         # "Reset" napari's mouse_drag_callbacks; does not remove automatically from previous session when closing widget window
         if len(self.viewer.mouse_drag_callbacks) > 1:
             self.viewer.mouse_drag_callbacks.pop(0)
+
+        if self.image_layers_combo.count() == 0:
+            show_info("No input image.")
 
         # If pipeline has been initialized before, reset first
         if hasattr(self, "pipeline_object"):
@@ -249,7 +252,11 @@ class SAM2Long(QWidget):
                 )
 
     def video_propagate(self):
-        self.pipeline_object.video_propagate()
+        if self.image_layers_combo.count() == 0:
+            show_info("No input image.")
+            return
+        else:
+            self.pipeline_object.video_propagate()
 
     def reset_everything(self):
         if hasattr(self, "pipeline_object"):
