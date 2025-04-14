@@ -22,8 +22,8 @@ class SAM2Long_pipeline(QWidget):
     ):
 
         build_sam2_video_predictor = pytest.importorskip(
-            "sam2.build_sam.build_sam2_video_predictor"
-        )
+            "sam2.build_sam"
+        ).build_sam2_video_predictor
         torch = pytest.importorskip("torch")
 
         super().__init__()
