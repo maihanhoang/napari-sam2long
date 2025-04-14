@@ -13,7 +13,10 @@ from qtpy.QtWidgets import QWidget
 
 # Sam2Long pipeline class
 class SAM2Long_pipeline(QWidget):
-    @pytest.mark.skip(reason="requires torch and sam2")
+    @pytest.mark.skipif(
+        "torch" not in globals() or "sam2" not in globals(),
+        reason="requires torch and sam2",
+    )
     def __init__(
         self,
         napari_viewer,
