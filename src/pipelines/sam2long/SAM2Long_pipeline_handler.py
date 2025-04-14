@@ -7,20 +7,16 @@ from pathlib import Path
 import cv2
 import numpy as np
 import pytest
-
-# import torch
 from napari.utils.notifications import show_info
 from qtpy.QtWidgets import QWidget
-
-# from sam2.build_sam import build_sam2_video_predictor
 
 
 # Sam2Long pipeline class
 class SAM2Long_pipeline(QWidget):
-    @pytest.mark.skipif(
-        "torch" not in globals() or "sam2" not in globals(),
-        reason="requires torch and sam2",
-    )
+    # @pytest.mark.skipif(
+    #     "torch" not in globals() or "sam2" not in globals(),
+    #     reason="requires torch and sam2",
+    # )
     def __init__(
         self,
         napari_viewer,
@@ -29,13 +25,13 @@ class SAM2Long_pipeline(QWidget):
         model_cfg_name,
     ):
 
-        import torch
-        from sam2.build_sam import build_sam2_video_predictor
+        # import torch
+        # from sam2.build_sam import build_sam2_video_predictor
 
-        # build_sam2_video_predictor = pytest.importorskip(
-        #     "sam2.build_sam.build_sam2_video_predictor"
-        # )
-        # torch = pytest.importorskip("torch")
+        build_sam2_video_predictor = pytest.importorskip(
+            "sam2.build_sam.build_sam2_video_predictor"
+        )
+        torch = pytest.importorskip("torch")
 
         super().__init__()
         self.viewer = napari_viewer
@@ -210,12 +206,12 @@ class SAM2Long_pipeline(QWidget):
         label_layer_data[ann_frame_idx, :, :] = mask_for_this_frame
         layer.data = label_layer_data
 
-    @pytest.mark.skipif("torch" not in globals(), reason="requires torch")
+    # @pytest.mark.skipif("torch" not in globals(), reason="requires torch")
     def video_propagate(self, per_obj_png_file=True):
 
-        import torch
+        # import torch
 
-        # torch = pytest.importorskip("torch")
+        torch = pytest.importorskip("torch")
 
         # run propagation throughout the video and collect the results in a dict
         layer_name = self.mwo.output_layers_combo.currentText()
