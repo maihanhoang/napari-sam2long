@@ -30,6 +30,7 @@ dependencies = [
     "qtpy",
     "scikit-image",
     "opencv-python",
+    "pytest",  # https://docs.pytest.org/en/latest/contents.html
 ]
 
 [project.optional-dependencies]
