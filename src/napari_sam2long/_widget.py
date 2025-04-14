@@ -60,12 +60,9 @@ class SAM2Long(QWidget):
         self.viewer.layers.events.removed.connect(self.layer_changed)
         self.viewer.layers.events.changed.connect(self.layer_changed)
         self.viewer.mouse_drag_callbacks.append(self.on_mouse_click)
-        # self.appInstance.lastWindowClosed.connect(
-        #     self.delete_source_dir
-        # )  ### Delete tempory source frame directory when closing napari
-
-        if self.appInstance is not None:
-            self.appInstance.lastWindowClosed.connect(self.delete_source_dir)
+        self.appInstance.lastWindowClosed.connect(
+            self.delete_source_dir
+        )  ### Delete tempory source frame directory when closing napari
 
         # Connect button to functions
         self.initialize_btn.clicked.connect(self.initialize_pipeline)
