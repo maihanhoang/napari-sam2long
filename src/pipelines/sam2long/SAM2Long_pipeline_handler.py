@@ -184,7 +184,7 @@ class SAM2Long_pipeline(QWidget):
         ):
             print("label", label_layer_data.shape)
             print("outmask", out_mask_logits[0][0].cpu().numpy().shape)
-            show_info("Reset & initialize before processing new data.")
+            show_info("Create a new labels layer.")
             return
 
         mask_for_this_frame = np.zeros(
