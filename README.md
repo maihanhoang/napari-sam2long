@@ -12,6 +12,14 @@
 A plugin for interactive 3D (volumetric or time-lapse) segmentation using Meta's Segment Anything Model 2 (SAM2).
 
 ----------------------------------
+<!--
+<video src="https://github.com/user-attachments/assets/c836cad5-2599-4647-ae4b-f2006bcf5ac7" width=100%>
+-->
+
+https://github.com/user-attachments/assets/c836cad5-2599-4647-ae4b-f2006bcf5ac7
+
+https://github.com/user-attachments/assets/04396517-cc20-42f4-93f3-81cc2a0f4560
+
 Designed for bioimaging researchers working with 3D volumetric or time-lapse images, this plugin supports TIFF files in ZYX or TYX format. Users can provide input and make corrections through point clicks or manually drawn masks.
 
 The tool leverages the [SAM2Long](https://github.com/Mark12Ding/SAM2Long) model, an optimized version of [Meta's SAM 2](https://github.com/facebookresearch/sam2) with enhancements to the memory module for improved performance on long videos. It was built to support long videos, but it remains effective for shorter videos as well.
