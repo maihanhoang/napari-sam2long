@@ -1,5 +1,5 @@
 name: napari-sam2long
-display_name: Sam2long
+display_name: SAM2Long
 # use 'hidden' to remove plugin from napari hub search results
 visibility: hidden
 # see https://napari.org/stable/plugins/technical_references/manifest.html#fields for valid categories

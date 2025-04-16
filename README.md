@@ -16,9 +16,9 @@ A plugin for interactive 3D (volumetric or time-lapse) segmentation using Meta's
 <video src="https://github.com/user-attachments/assets/c836cad5-2599-4647-ae4b-f2006bcf5ac7" width=100%>
 -->
 
-https://github.com/user-attachments/assets/6c753c65-ff8c-4dff-a9c9-5b445f5cad13
+![napari-sam2long-firstLabel](https://github.com/user-attachments/assets/6c753c65-ff8c-4dff-a9c9-5b445f5cad13)
 
-https://github.com/user-attachments/assets/04396517-cc20-42f4-93f3-81cc2a0f4560
+![napari-sam2long-anotherLabel](https://github.com/user-attachments/assets/04396517-cc20-42f4-93f3-81cc2a0f4560)
 
 Designed for bioimaging researchers working with 3D volumetric or time-lapse images, this plugin supports TIFF files in ZYX or TYX format. Users can provide input and make corrections through point clicks or manually drawn masks.
 
