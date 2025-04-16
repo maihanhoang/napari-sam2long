@@ -16,7 +16,7 @@ A plugin for interactive 3D (volumetric or time-lapse) segmentation using Meta's
 <video src="https://github.com/user-attachments/assets/c836cad5-2599-4647-ae4b-f2006bcf5ac7" width=100%>
 -->
 
-https://github.com/user-attachments/assets/c836cad5-2599-4647-ae4b-f2006bcf5ac7
+https://github.com/user-attachments/assets/6c753c65-ff8c-4dff-a9c9-5b445f5cad13
 
 https://github.com/user-attachments/assets/04396517-cc20-42f4-93f3-81cc2a0f4560
 
@@ -102,12 +102,6 @@ Note: When making corrections and "re-defining" the masks, this plugin treats th
 Contributions are very welcome. Tests can be run with [tox], please ensure
 the coverage at least stays the same before you submit a pull request.
 
-## Bibliography
-[1]: Nikhila Ravi, Valentin Gabeur, Yuan-Ting Hu, Ronghang Hu, Chaitanya Ryali, Tengyu Ma, Haitham Khedr, Roman Rädle, Chloe Rolland, Laura Gustafson, Eric Mintun, Junting Pan, Kalyan Vasudev Alwala, Nicolas Carion, Chao-Yuan Wu, Ross Girshick, Piotr Dollár, & Christoph Feichtenhofer. (2024). SAM 2: Segment Anything in Images and Videos.
-
-[2]: Ding, S., Qian, R., Dong, X., Zhang, P., Zang, Y., Cao, Y., Guo, Y., Lin, D., & Wang, J. (2024). SAM2Long: Enhancing SAM 2 for Long Video Segmentation with a Training-Free Memory Tree. arXiv preprint arXiv:2410.16268.
-
-
 ## Issues
 
 If you encounter any problems, please [file an issue] along with a detailed description.
@@ -129,6 +123,11 @@ If you encounter any problems, please [file an issue] along with a detailed desc
 [tox]: https://tox.readthedocs.io/en/latest/
 [pip]: https://pypi.org/project/pip/
 [PyPI]: https://pypi.org/
+
+## Bibliography
+[1]: Nikhila Ravi, Valentin Gabeur, Yuan-Ting Hu, Ronghang Hu, Chaitanya Ryali, Tengyu Ma, Haitham Khedr, Roman Rädle, Chloe Rolland, Laura Gustafson, Eric Mintun, Junting Pan, Kalyan Vasudev Alwala, Nicolas Carion, Chao-Yuan Wu, Ross Girshick, Piotr Dollár, & Christoph Feichtenhofer. (2024). SAM 2: Segment Anything in Images and Videos.
+
+[2]: Ding, S., Qian, R., Dong, X., Zhang, P., Zang, Y., Cao, Y., Guo, Y., Lin, D., & Wang, J. (2024). SAM2Long: Enhancing SAM 2 for Long Video Segmentation with a Training-Free Memory Tree. arXiv preprint arXiv:2410.16268.
 
 ## License & Attribution
 
