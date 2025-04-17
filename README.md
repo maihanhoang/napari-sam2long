@@ -18,11 +18,15 @@ The tool leverages the [SAM2Long](https://github.com/Mark12Ding/SAM2Long) model,
 This [napari] plugin was generated with [copier] using the [napari-plugin-template].
 
 <div align="center">
+
 https://github.com/user-attachments/assets/6c753c65-ff8c-4dff-a9c9-5b445f5cad13
+
 </div>
 
 <div align="center">
+
 https://github.com/user-attachments/assets/04396517-cc20-42f4-93f3-81cc2a0f4560
+
 </div>
 
 ## Installation
