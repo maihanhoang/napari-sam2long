@@ -134,7 +134,7 @@ If you encounter any problems, please [file an issue] along with a detailed desc
 ## License & Attribution
 
 This project integrates code from:
-- [SAM2] by Meta (https://github.com/facebookresearch/sam2) ([`Apache 2.0 License`](LICENSE-Apache-2.0))
+- [SAM2](https://github.com/facebookresearch/sam2) by Meta ([`Apache 2.0 License`](LICENSE-Apache-2.0))
 - [SAM2Long](https://github.com/Mark12Ding/SAM2Long) by Shuangrui Ding et al. ([`CC-BY-NC 4.0 License`](LICENSE-CC-BY-NC-4.0))
 - [napari-samv2](https://github.com/Krishvraman/napari-SAMV2) by Krishnan Venkataraman ([`BSD-3 License`](LICENSE-BSD-3))
 
