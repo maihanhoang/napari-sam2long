@@ -12,3 +12,4 @@ contributions:
   widgets:
     - command: napari-sam2long.make_qwidget
       display_name: SAM2Long
+url: https://github.com/maihanhoang/napari-sam2long

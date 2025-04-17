@@ -11,28 +11,19 @@
 
 A plugin for interactive 3D (volumetric or time-lapse) segmentation using Meta's Segment Anything Model 2 (SAM2).
 
-----------------------------------
-<!--
-<video src="https://github.com/user-attachments/assets/c836cad5-2599-4647-ae4b-f2006bcf5ac7" width=100%>
--->
-
-![napari-sam2long-firstLabel](https://github.com/user-attachments/assets/6c753c65-ff8c-4dff-a9c9-5b445f5cad13)
-
-![napari-sam2long-anotherLabel](https://github.com/user-attachments/assets/04396517-cc20-42f4-93f3-81cc2a0f4560)
-
 Designed for bioimaging researchers working with 3D volumetric or time-lapse images, this plugin supports TIFF files in ZYX or TYX format. Users can provide input and make corrections through point clicks or manually drawn masks.
 
 The tool leverages the [SAM2Long](https://github.com/Mark12Ding/SAM2Long) model, an optimized version of [Meta's SAM 2](https://github.com/facebookresearch/sam2) with enhancements to the memory module for improved performance on long videos. It was built to support long videos, but it remains effective for shorter videos as well.
 
 This [napari] plugin was generated with [copier] using the [napari-plugin-template].
 
-<!--
-Don't miss the full getting started guide to set up your new package:
-https://github.com/napari/napari-plugin-template#getting-started
+<div align="center">
+https://github.com/user-attachments/assets/6c753c65-ff8c-4dff-a9c9-5b445f5cad13
+</div>
 
-and review the napari docs for plugin developers:
-https://napari.org/stable/plugins/index.html
--->
+<div align="center">
+https://github.com/user-attachments/assets/04396517-cc20-42f4-93f3-81cc2a0f4560
+</div>
 
 ## Installation
 Please see the official [SAM 2](https://github.com/facebookresearch/sam2) repo and the [INSTALL.md](https://github.com/facebookresearch/sam2/blob/main/INSTALL.md) for notes and FAQs on potential installation issues.
@@ -132,6 +123,7 @@ If you encounter any problems, please [file an issue] along with a detailed desc
 ## License & Attribution
 
 This project integrates code from:
+- [SAM2](https://github.com/facebookresearch/sam2) ([`Apache 2.0 License`](LICENSE-Apache-2.0))
 - [SAM2Long](https://github.com/Mark12Ding/SAM2Long) by Shuangrui Ding et al. ([`CC-BY-NC 4.0 License`](LICENSE-CC-BY-NC-4.0))
 - [napari-samv2](https://github.com/Krishvraman/napari-SAMV2) by Krishnan Venkataraman ([`BSD-3 License`](LICENSE-BSD-3))
 
