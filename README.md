@@ -23,6 +23,7 @@ https://github.com/user-attachments/assets/6c753c65-ff8c-4dff-a9c9-5b445f5cad13
 
 </div>
 
+
 <div align="center">
 
 https://github.com/user-attachments/assets/04396517-cc20-42f4-93f3-81cc2a0f4560
@@ -61,36 +62,42 @@ Please see the official [SAM 2](https://github.com/facebookresearch/sam2) repo a
 ## Usage
 
 ### Segmenting & tracking first object
-1. Open a 3D tiff in napari, make sure it is in TYX or ZYX format
-2. Select the image in the drop-down menu of *Input*
-3. Add a new [labels layer](https://napari.org/0.5.0/howtos/layers/labels.html) to the viewer and select it in the drop-down menu of *Labels*
-    Note: The labels layer should always be added to the viewer after the input image to match the dimensions.
-4. Select the *Model*
-5. Click *Initialize* to load the image and initialize the inference state
-6. Select an object on any frame and get an initial mask with
-    - the *mouse middle click* to get the model's mask prediction
-        (*mouse middle click* to add and *Ctrl+mouse middle click* to remove areas) and/or
-    - napari's [labels layers tools](https://napari.org/0.5.0/howtos/layers/labels.html#gui-tools-for-the-labels-layer) (e.g. paintbrush, eraser etc.) to manually draw a mask
+1. **Open a 3D tiff** in napari, make sure it's in TYX or ZYX format.
+2. **Select** the image in the ***Input*** dropdown.
+3. **Add a new [labels layer](https://napari.org/0.5.0/howtos/layers/labels.html)** *after* the input image, then select it in the *Labels* dropdown.
 
-    Note: When the model fails to segment the desired object with the point prompts using *(Ctrl+) mouse middle click*, manually drawing/correcting the mask with napari's labels layer tools can be very useful
+    The labels layer must be added after the image to ensure dimension alignment.
+4. **Select the *Model***.
+5. **Click *Initialize*** to load the image and initialize the inference state.
+6. **Define the initial object mask** on any frame:
+    - Use the mouse middle-click to prompt the model:
+        - *Middle-click* = add region
+        - *Ctrl + middle-click* = remove region
+    - Or use napari's built-in tools (paintbrush, eraser, etc.) to draw the mask manually.
 
-7. Once satisfied with the initial mask, click *Propagate from current frame* to obtain segmentations for all subsequent frames. The result will be added to the labels layer.
+    If the model doesn’t segment the object accurately with point prompts, manual correction using napari tools can be useful.
 
-    Note: *Propagate from current frame* computes the masklets only for the subsequent frames to reduce computation time and does not affect any masklets of the previous frames. Only the mask of the current frame propagation is started from is considered in the prediction, any prompts made in previous and subsequent frames are not regarded.
+7. Once satisfied with the initial mask, **click *Propagate from current frame*** to obtain segmentations for all subsequent frames. The result will be added to the labels layer.
+
+    Propagation only affects future frames. It does not recompute previous ones or consider prompts from other frames. Only the current mask is used to propagate forward.
 
 ### Making corrections
-8. Re-draw a new mask on any frame by using the *(Ctrl+) mouse middle click* to (remove) add regions and/or napari's labels layers tools.
-9. *Propagate from current frame* to re-run the model's predictions with the new mask
+8. To refine segmentation, add/remove regions use:
+    - *(Ctrl+) middle-click* prompts
+    - napari’s label tools
+9. *Propagate from current frame* to re-run the model's predictions with the new mask.
 
-Note: When making corrections and "re-defining" the masks, this plugin treats the corrected mask as a new initial mask and disregards any previous prompts on this frame.
+    The plugin treats this as a new initial mask and discards earlier prompts on that frame.
 
 ### Segmenting another object in the same image/video
-10. Save labels layer with the segmentation result of previous object
-11. Click *Reset* or add another labels layer to the viewer and select the new layer in the *Labels*-dropdown. Select new object as described in step 6.
+10. Save the current labels layer (to preserve previous segmentation).
+11. Click *Reset*, or add a new labels layer and select it in the *Labels* dropdown.
+Then repeat steps from Step 6 for the next object.
 
 ###  Segment new image/video
-12. *Reset* inference state
-13. Load new image/video and follow instructions from step 1. *Initialize* is necessary to load the new image/video.
+12. *Reset* inference state.
+13. Load new image and follow instructions starting from Step 1.
+    *Initialize* is necessary to load the new image.
 
 ## Contributing
 
@@ -127,7 +134,7 @@ If you encounter any problems, please [file an issue] along with a detailed desc
 ## License & Attribution
 
 This project integrates code from:
-- [SAM2](https://github.com/facebookresearch/sam2) ([`Apache 2.0 License`](LICENSE-Apache-2.0))
+- [SAM2] by Meta (https://github.com/facebookresearch/sam2) ([`Apache 2.0 License`](LICENSE-Apache-2.0))
 - [SAM2Long](https://github.com/Mark12Ding/SAM2Long) by Shuangrui Ding et al. ([`CC-BY-NC 4.0 License`](LICENSE-CC-BY-NC-4.0))
 - [napari-samv2](https://github.com/Krishvraman/napari-SAMV2) by Krishnan Venkataraman ([`BSD-3 License`](LICENSE-BSD-3))
 
