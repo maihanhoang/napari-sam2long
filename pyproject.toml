@@ -47,6 +47,7 @@ testing = [
 napari-sam2long = "napari_sam2long:napari.yaml"
 
 [project.urls]
+"Homepage" = "https://github.com/maihanhoang/napari-sam2long"
 "Bug Tracker" = "https://github.com/maihanhoang/napari-sam2long/issues"
 "Documentation" = "https://github.com/maihanhoang/napari-sam2long#README.md"
 "Source Code" = "https://github.com/maihanhoang/napari-sam2long"

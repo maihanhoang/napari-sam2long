@@ -17,18 +17,14 @@ The tool leverages the [SAM2Long](https://github.com/Mark12Ding/SAM2Long) model,
 
 This [napari] plugin was generated with [copier] using the [napari-plugin-template].
 
-<div align="center">
+<p align="middle">
+  <img src="assets/napari-sam2long-firstLabel.gif" width="100%" />
+</p>
 
-https://github.com/user-attachments/assets/6c753c65-ff8c-4dff-a9c9-5b445f5cad13
+<p align="middle">
+  <img src="assets/napari-sam2long-anotherLabel.gif" width="100%" />
+</p>
 
-</div>
-
-
-<div align="center">
-
-https://github.com/user-attachments/assets/04396517-cc20-42f4-93f3-81cc2a0f4560
-
-</div>
 
 ## Installation
 Please see the official [SAM 2](https://github.com/facebookresearch/sam2) repo and the [INSTALL.md](https://github.com/facebookresearch/sam2/blob/main/INSTALL.md) for notes and FAQs on potential installation issues.
