@@ -17,10 +17,12 @@ The tool leverages the [SAM2Long](https://github.com/Mark12Ding/SAM2Long) model,
 
 This [napari] plugin was generated with [copier] using the [napari-plugin-template].
 
+<h3 align="center">Select object with point prompts</h3>
 <p align="middle">
   <img src="assets/napari-sam2long-firstLabel.gif" width="100%" />
 </p>
 
+<h3 align="center">Refine object selection with napari tools </h3>
 <p align="middle">
   <img src="assets/napari-sam2long-anotherLabel.gif" width="100%" />
 </p>
