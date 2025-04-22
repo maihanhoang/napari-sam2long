@@ -18,11 +18,13 @@ The tool leverages the [SAM2Long](https://github.com/Mark12Ding/SAM2Long) model,
 This [napari] plugin was generated with [copier] using the [napari-plugin-template].
 
 <h3 align="center">Select object with point prompts</h3>
+
 <p align="middle">
   <img src="https://github.com/maihanhoang/napari-sam2long/raw/main/assets/napari-sam2long-firstLabel.gif" width="100%" />
 </p>
 
 <h3 align="center">Refine object selection with napari tools </h3>
+
 <p align="middle">
   <img src="https://github.com/maihanhoang/napari-sam2long/raw/main/assets/napari-sam2long-anotherLabel.gif" width="100%" />
 </p>
@@ -33,7 +35,7 @@ Please see the official [SAM 2](https://github.com/facebookresearch/sam2) repo a
 
 1. Create a new conda environment with python>=3.10 and install napari:
     ```bash
-    conda create -n napari-sam2long python==3.10
+    conda create -n napari-sam2long python==3.10 pip
     conda activate napari-sam2long
     python -m pip install "napari[all]"
     ```
@@ -50,11 +52,11 @@ Please see the official [SAM 2](https://github.com/facebookresearch/sam2) repo a
     ```bash
     git clone git@github.com:maihanhoang/napari-sam2long.git
 
-    cd napari-sam2long/SAM2Long && pip install -e .
+    cd napari-sam2long/SAM2Long && python -m pip install -e .
     ```
 4. Install napari-SAM2Long plugin:
     ```bash
-    cd .. && pip install e .
+    cd .. && python -m pip install e .
     ```
 
 ## Usage
